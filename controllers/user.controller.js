@@ -1,11 +1,11 @@
-const { User } = require('../models'); 
+const { Users } = require('../models'); 
 const bcrypt = require('bcryptjs');
 const { sequelize } = require("../models/index");
 const { Sequelize } = require('sequelize'); 
 class UserController {
     async getAllUsers(req, res) {
         try {
-            const users = await User.findAll();
+            const users = await Users.findAll();
             res.status(200).json({
                 message: "Lấy danh sách user thành công",
                 data: users
@@ -20,15 +20,15 @@ class UserController {
         try {
             const { id } = req.params;
 
-            const user = await User.findByPk(id);
+            const user = await Users.findByPk(id);
             if (!user) {
                 return res.status(404).json({ message: "Không tìm thấy user" });
             }
 
             const favoriteMovies = await sequelize.query(
                 `SELECT p.* 
-                 FROM Phims p
-                 INNER JOIN YeuThiches yt ON p.id = yt.phim_id
+                 FROM "Phims" p
+                 INNER JOIN "YeuThiches" yt ON p.id = yt.phim_id
                  WHERE yt.nguoi_dung_id = :nguoiDungId`,
                 {
                     replacements: { nguoiDungId: id },
@@ -59,12 +59,12 @@ class UserController {
                 return res.status(400).json({ message: "Thiếu thông tin bắt buộc" });
             }
 
-            const existingUser = await User.findOne({ where: { email } });
+            const existingUser = await Users.findOne({ where: { email } });
             if (existingUser) {
                 return res.status(409).json({ message: "Email đã được sử dụng" });
             }
             const hashedPassword = bcrypt.hashSync(password, 10);
-            const newUser = await User.create({
+            const newUser = await Users.create({
                 name: username,
                 email,
                 password: hashedPassword,
@@ -87,7 +87,7 @@ class UserController {
           const { id } = req.params;
           const { name, email, role, phimIdsToRemove } = req.body; 
     
-          const user = await User.findByPk(id);
+          const user = await Users.findByPk(id);
           if (!user) {
             return res.status(404).json({ message: "Không tìm thấy user" });
           }
@@ -102,7 +102,7 @@ class UserController {
           // Xóa phim yêu thích nếu có phimIdsToRemove
           if (phimIdsToRemove && Array.isArray(phimIdsToRemove) && phimIdsToRemove.length > 0) {
             await sequelize.query(
-              `DELETE FROM YeuThiches 
+              `DELETE FROM "YeuThiches" 
                WHERE nguoi_dung_id = :nguoiDungId 
                AND phim_id IN (:phimIds)`,
               {
@@ -115,8 +115,8 @@ class UserController {
           // Lấy lại danh sách phim yêu thích còn lại (tùy chọn)
           const updatedFavoriteMovies = await sequelize.query(
             `SELECT p.* 
-             FROM Phims p
-             INNER JOIN YeuThiches yt ON p.id = yt.phim_id
+             FROM "Phims" p
+             INNER JOIN "YeuThiches" yt ON p.id = yt.phim_id
              WHERE yt.nguoi_dung_id = :nguoiDungId`,
             {
               replacements: { nguoiDungId: id },
@@ -143,7 +143,7 @@ class UserController {
             const { id } = req.params;
 
             // Tìm user theo ID
-            const user = await User.findByPk(id);
+            const user = await Users.findByPk(id);
             if (!user) {
                 return res.status(404).json({ message: "Không tìm thấy user" });
             }

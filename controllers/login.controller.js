@@ -1,7 +1,7 @@
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { User } = require('../models');
+const { Users } = require('../models');
 
 class LoginController {
   async Login(req, res) {
@@ -9,7 +9,7 @@ class LoginController {
     console.log("email:", email);
     console.log("pass:", password);
     try {
-      const user = await User.findOne({ where: { email } });
+      const user = await Users.findOne({ where: { email } });
       if (!user) {
         return res.status(404).json({ message: 'Tài khoản không tồn tại' });
       }

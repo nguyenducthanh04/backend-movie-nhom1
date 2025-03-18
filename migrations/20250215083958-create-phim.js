@@ -60,9 +60,6 @@ module.exports = {
       duong_dan_gioi_thieu: {
         type: Sequelize.STRING
       },
-      ten_goc: {
-        type: Sequelize.STRING
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

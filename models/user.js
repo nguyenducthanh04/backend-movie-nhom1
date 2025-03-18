@@ -2,10 +2,10 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class User extends Model {
+  class Users extends Model {
     static associate(models) {
       // Quan hệ nhiều-nhiều với bảng Phim thông qua bảng YeuThich
-      User.belongsToMany(models.phims, { 
+      Users.belongsToMany(models.Phims, { 
         through: 'YeuThich',  // Thêm bảng trung gian
         foreignKey: 'nguoi_dung_id', 
         onDelete: 'CASCADE' 
@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
 
-  User.init({
+  Users.init({
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -33,8 +33,8 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     sequelize,
-    modelName: 'User',
+    modelName: 'Users',
   });
 
-  return User;
+  return Users;
 };

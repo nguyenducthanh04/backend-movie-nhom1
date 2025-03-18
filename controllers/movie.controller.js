@@ -2,8 +2,8 @@ const { where } = require('sequelize');
 const { Op } = require("sequelize");
 const { sequelize } = require("../models/index");
 const Model = require('../models/index');
-const Phim = Model.phims;
-const TapPhim = Model.tapphims;
+const Phim = Model.Phims;
+const TapPhim = Model.TapPhims;
 class MovieController {
     async getAnimeMovie(req, res){
         try {
@@ -44,7 +44,7 @@ class MovieController {
                     { model: TapPhim },
                 ]
             });
-
+            console.log("hiiii", animeDetail)
             if (!animeDetail) {
                 return res.status(404).json({ message: 'Không tìm thấy phim' });
             }
@@ -59,7 +59,7 @@ class MovieController {
         try {
             const { nguoi_dung_id, phim_id } = req.body;
             const [results] = await sequelize.query(
-                "SELECT * FROM yeuthiches WHERE nguoi_dung_id = :nguoi_dung_id AND phim_id = :phim_id",
+                'SELECT * FROM "YeuThiches" WHERE nguoi_dung_id = :nguoi_dung_id AND phim_id = :phim_id',
                 {
                     replacements: { nguoi_dung_id, phim_id },
                     type: sequelize.QueryTypes.SELECT
@@ -71,7 +71,7 @@ class MovieController {
             }
 
             await sequelize.query(
-                "INSERT INTO yeuthiches (nguoi_dung_id, phim_id, createdAt, updatedAt) VALUES (:nguoi_dung_id, :phim_id, NOW(), NOW())",
+                'INSERT INTO "YeuThiches" ("nguoi_dung_id", "phim_id", "createdAt", "updatedAt") VALUES (:nguoi_dung_id, :phim_id, NOW(), NOW())',
                 {
                     replacements: { nguoi_dung_id, phim_id },
                     type: sequelize.QueryTypes.INSERT
@@ -88,7 +88,7 @@ class MovieController {
         try {
             const { nguoi_dung_id, phim_id } = req.body;
             const [results] = await sequelize.query(
-                "SELECT * FROM yeuthiches WHERE nguoi_dung_id = :nguoi_dung_id AND phim_id = :phim_id",
+                'SELECT * FROM "YeuThiches" WHERE nguoi_dung_id = :nguoi_dung_id AND phim_id = :phim_id',
                 {
                     replacements: { nguoi_dung_id, phim_id },
                     type: sequelize.QueryTypes.SELECT
@@ -99,7 +99,7 @@ class MovieController {
                 return res.status(400).json({ message: "Phim không có trong danh sách yêu thích" });
             }
             await sequelize.query(
-                "DELETE FROM yeuthiches WHERE nguoi_dung_id = :nguoi_dung_id AND phim_id = :phim_id",
+                'DELETE FROM "YeuThiches" WHERE nguoi_dung_id = :nguoi_dung_id AND phim_id = :phim_id',
                 {
                     replacements: { nguoi_dung_id, phim_id },
                     type: sequelize.QueryTypes.RAW
@@ -132,7 +132,7 @@ class MovieController {
     
            
             const [results] = await sequelize.query(
-                `SELECT * FROM yeuthiches WHERE nguoi_dung_id = :nguoi_dung_id AND phim_id = :phim_id`,
+                `SELECT * FROM "YeuThiches" WHERE nguoi_dung_id = :nguoi_dung_id AND phim_id = :phim_id`,
                 {
                     replacements: { nguoi_dung_id, phim_id },
                     type: sequelize.QueryTypes.SELECT,
@@ -154,8 +154,8 @@ class MovieController {
             }
             const favoriteMovies = await sequelize.query(
                 `SELECT p.id, p.ten_phim, p.anh_nen_phim, p.ten_dia_chi_phim
-                FROM yeuthiches y
-                JOIN phims p ON y.phim_id = p.id
+                FROM "YeuThiches" y
+                JOIN "Phims" p ON y.phim_id = p.id
                 WHERE y.nguoi_dung_id = :nguoi_dung_id`,
                 {
                     replacements: { nguoi_dung_id },

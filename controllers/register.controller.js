@@ -1,7 +1,7 @@
 const { validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
-const { User } = require('../models');
+const { Users } = require('../models');
 const nodemailer = require("nodemailer");
 
 class RegisterController {
@@ -9,18 +9,20 @@ class RegisterController {
     const { email, password, name } = req.body;
 
     try {
-      const existingUser = await User.findOne({ where: { email } });
+      const existingUser = await Users.findOne({ where: { email } });
       if (existingUser) {
         return res.status(400).json({ message: 'Email đã được sử dụng' });
       }
 
       const hashedPassword = bcrypt.hashSync(password, 10);
       const verificationCode = crypto.randomBytes(4).toString('hex');
-      const newUser = await User.create({
+      const newUser = await Users.create({
         email,
         password: hashedPassword,
         name,
         verificationCode: verificationCode,
+        createdAt: new Date(),
+        updatedAt: new Date()
       });
 
       const transporter = nodemailer.createTransport({
@@ -60,7 +62,7 @@ class RegisterController {
     const { emailAccount, verificationCode } = req.body;
 
     try {
-      const user = await User.findOne({ where: { email: emailAccount } });
+      const user = await Users.findOne({ where: { email: emailAccount } });
       if (!user) {
         return res.status(404).json({ message: 'Người dùng không tồn tại' });
       }
@@ -88,7 +90,7 @@ class RegisterController {
     const { emailResetVerify } = req.body;
 
     try {
-      const user = await User.findOne({ where: { email: emailResetVerify } });
+      const user = await Users.findOne({ where: { email: emailResetVerify } });
       if (!user) {
         return res.status(404).json({ message: 'Người dùng không tồn tại' });
       }

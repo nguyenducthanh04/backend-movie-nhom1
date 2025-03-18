@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class danhmucs extends Model {
+  class DanhMucs extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,10 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      danhmucs.hasMany(models.phims, { foreignKey: 'danh_muc_id', onDelete: 'CASCADE' });
+      DanhMucs.hasMany(models.Phims, { foreignKey: 'danh_muc_id', onDelete: 'CASCADE' });
     }
   }
-  danhmucs.init({
+  DanhMucs.init({
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
     ten_danh_muc: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'danhmucs',
+    modelName: 'DanhMucs',
   });
-  return danhmucs;
+  return DanhMucs;
 };

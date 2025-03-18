@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class tapphims extends Model {
+  class TapPhims extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,10 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      tapphims.belongsTo(models.phims, { foreignKey: 'phim_id', onDelete: 'CASCADE' });
+      TapPhims.belongsTo(models.Phims, { foreignKey: 'phim_id', onDelete: 'CASCADE' });
     }
   }
-  tapphims.init({
+  TapPhims.init({
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     phim_id: DataTypes.INTEGER
   }, {
     sequelize,
-    modelName: 'tapphims',
+    modelName: 'TapPhims',
   });
-  return tapphims;
+  return TapPhims;
 };

@@ -2,19 +2,19 @@
 const { Model } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-  class phims extends Model {
+  class Phims extends Model {
     static associate(models) {
       // Quan hệ 1-N với bảng TapPhim
-      phims.hasMany(models.tapphims, { foreignKey: 'phim_id', onDelete: 'CASCADE' });
+      Phims.hasMany(models.TapPhims, { foreignKey: 'phim_id', onDelete: 'CASCADE' });
 
       // Quan hệ N-N với User qua bảng trung gian YeuThich
-      phims.belongsToMany(models.User, { 
+      Phims.belongsToMany(models.Users, { 
         through: 'YeuThich',  
         foreignKey: 'phim_id',  
         onDelete: 'CASCADE' 
       });
       // Quan hệ N-1 với DanhMuc
-      phims.belongsTo(models.danhmucs, { 
+      Phims.belongsTo(models.DanhMucs, { 
         foreignKey: 'danh_muc_id', 
         as: 'danhMuc',  // Alias để tránh xung đột
         onDelete: 'CASCADE' 
@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
 
-  phims.init({
+  Phims.init({
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -42,14 +42,13 @@ module.exports = (sequelize, DataTypes) => {
     nam_san_xuat: DataTypes.STRING,
     tap_da_phat: DataTypes.STRING,
     tong_so_tap: DataTypes.STRING,
-    ten_goc: DataTypes.STRING,
     duong_dan_gioi_thieu: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'phims',
+    modelName: 'Phims',
     timestamps: true,  // Bật tự động cập nhật createdAt, updatedAt
-    tableName: 'phims'
+    tableName: 'Phims'
   });
 
-  return phims;
+  return Phims;
 };
