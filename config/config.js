@@ -9,11 +9,12 @@ module.exports = {
     port: process.env.DB_PORT,
     dialect: process.env.DB_DRIVER,
     dialectOptions: {
-			ssl: {
-				require: true,
-			},
-		},
-		dialectModule: pg,
+      ssl: {
+        require: true, // Bắt buộc với Supabase
+        rejectUnauthorized: false // Bỏ qua lỗi chứng chỉ (dùng tạm thời)
+      },
+    },
+    logging: true, // Bật log để debug
   },
   test: {
     username: process.env.DB_USER,
@@ -23,11 +24,11 @@ module.exports = {
     port: process.env.DB_PORT,
     dialect: process.env.DB_DRIVER,
     dialectOptions: {
-			ssl: {
-				require: true,
-			},
-		},
-		dialectModule: pg,
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      },
+    },
   },
   production: {
     username: process.env.DB_USER,
@@ -37,10 +38,10 @@ module.exports = {
     port: process.env.DB_PORT,
     dialect: process.env.DB_DRIVER,
     dialectOptions: {
-			ssl: {
-				require: true,
-			},
-		},
-		dialectModule: pg,
+      ssl: {
+        require: true,
+        rejectUnauthorized: false
+      },
+    },
   },
 };
